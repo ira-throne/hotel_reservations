@@ -1,0 +1,34 @@
+# 1) from the hadoop directory, remove the temporary folders
+#    (steps 1 and 2 wipe HDFS; only needed for a clean start)
+rm -Rf tmpdata
+rm -Rf dfsdata
+
+# 2) format the namenode
+hdfs namenode -format
+
+# 3) start hadoop
+start-all.sh
+
+# 4) check all 6 services are running
+jps
+
+# 5) create a folder and upload the files (run from the folder containing the CSVs)
+hadoop fs -mkdir /project
+hadoop fs -put hotel-booking.csv /project
+hadoop fs -put customer-reservations.csv /project
+
+# 6) open http://localhost:9870 and make sure the files are there
+
+# 7) run main.sh
+./main.sh
+
+# 8) enter inputs
+hdfs:///project
+hdfs:///project
+hdfs:///output
+
+# 9) view the results
+hadoop fs -cat hdfs:///output/part-*
+
+# 10) stop hadoop
+stop-all.sh
